@@ -34,6 +34,7 @@ English | [简体中文](README_zh-CN.md)
 >
 > **Star Us**, You will receive all release notifications from GitHub without any delay ~ ⭐️
 
+## This repo added some commits for pmx eval
 ## 📣 OpenCompass 2.0
 
 We are thrilled to introduce OpenCompass 2.0, an advanced suite featuring three key components: [CompassKit](https://github.com/open-compass), [CompassHub](https://hub.opencompass.org.cn/home), and [CompassRank](https://rank.opencompass.org.cn/home).
