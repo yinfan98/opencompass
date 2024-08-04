@@ -25,7 +25,7 @@ def get_command_template(gpu_ids: List[int]) -> str:
     """Format command template given available gpu ids."""
     if is_npu_available():
         tmpl = 'ASCEND_RT_VISIBLE_DEVICES=' + ','.join(str(i) for i in gpu_ids)
-        tmpl += ' & {task_cmd}'
+        tmpl += ' {task_cmd}'
     elif sys.platform == 'win32':  # Always return win32 for Windows
         # use command in Windows format
         tmpl = 'set CUDA_VISIBLE_DEVICES=' + ','.join(str(i) for i in gpu_ids)
@@ -130,7 +130,15 @@ class LocalRunner(BaseRunner):
                         else:
                             task.run()
                     else:
-                        subprocess.run(cmd, shell=True, text=True)
+                        tmp_logs = f'tmp/{os.getpid()}_debug.log'
+                        get_logger().debug(
+                            f'Debug mode, log will be saved to {tmp_logs}')
+                        with open(tmp_logs, 'a') as log_file:
+                            subprocess.run(cmd,
+                                           shell=True,
+                                           text=True,
+                                           stdout=log_file,
+                                           stderr=subprocess.STDOUT)
                 finally:
                     os.remove(param_file)
                 status.append((task_name, 0))

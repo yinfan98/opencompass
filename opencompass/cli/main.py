@@ -1,6 +1,7 @@
 # flake8: noqa
 # yapf: disable
 import argparse
+import copy
 import getpass
 import os
 import os.path as osp
@@ -116,6 +117,12 @@ def parse_args():
         default=2)
     parser.add_argument(
         '--dump-eval-details',
+        help='Whether to dump the evaluation details, including the '
+        'correctness of each sample, bpb, etc.',
+        action='store_true',
+    )
+    parser.add_argument(
+        '--dump-extract-rate',
         help='Whether to dump the evaluation details, including the '
         'correctness of each sample, bpb, etc.',
         action='store_true',
@@ -315,7 +322,8 @@ def main():
             fill_eval_cfg(cfg, args)
         if args.dump_eval_details:
             cfg.eval.runner.task.dump_details = True
-
+        if args.dump_extract_rate:
+            cfg.eval.runner.task.cal_extract_rate = True
         if args.partition is not None:
             if RUNNERS.get(cfg.eval.runner.type) == SlurmRunner:
                 cfg.eval.runner.partition = args.partition
